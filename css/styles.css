@@ -27,6 +27,8 @@
 
   /* Diagonal angle */
   --diag-angle: 18deg;
+  --band-angle: -20deg;
+  --band-height: 120px;
 }
 
 /* ---------- Dark Theme (default) ---------- */
@@ -49,6 +51,8 @@
   --hero-glow: radial-gradient(ellipse at 50% 50%, rgba(127, 3, 252, 0.12) 0%, transparent 70%);
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
   --shadow-btn: 0 4px 16px rgba(127, 3, 252, 0.3);
+  --band-color: rgba(127, 3, 252, 0.07);
+  --band-edge: rgba(127, 3, 252, 0);
 }
 
 /* ---------- Light Theme ---------- */
@@ -71,6 +75,8 @@
   --hero-glow: radial-gradient(ellipse at 50% 50%, rgba(127, 3, 252, 0.08) 0%, transparent 70%);
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
   --shadow-btn: 0 4px 16px rgba(127, 3, 252, 0.2);
+  --band-color: rgba(127, 3, 252, 0.05);
+  --band-edge: rgba(127, 3, 252, 0);
 }
 
 /* ---------- Reset ---------- */
@@ -84,7 +90,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: var(--primary-dark) var(--bg-alt);
@@ -363,7 +369,7 @@ textarea {
    SECTIONS (Snap Scroll)
    ============================================ */
 .snap-container {
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   overflow-y: scroll;
   height: 100vh;
 }
@@ -435,18 +441,44 @@ textarea {
   border-radius: 2px;
 }
 
-/* Diagonal Accent (background decoration) */
+/* Diagonal Band — full-width horizontal stripe behind content */
 .section-diagonal-accent {
   position: absolute;
-  top: 0;
-  right: -5%;
-  width: 40%;
-  height: 100%;
-  background: var(--diagonal-color);
-  transform: skewX(calc(var(--diag-angle) * -1));
+  top: 50%;
+  left: 50%;
+  width: 160vw;
+  height: var(--band-height);
+  margin-top: calc(var(--band-height) / -2);
+  margin-left: -80vw;
+  background: linear-gradient(
+    to right,
+    var(--band-edge) 0%,
+    var(--band-color) 20%,
+    var(--band-color) 80%,
+    var(--band-edge) 100%
+  );
+  transform: rotate(var(--band-angle));
   z-index: 0;
   pointer-events: none;
   transition: background var(--transition);
+  /* Subtle depth shadow */
+  box-shadow:
+    0 0 60px 20px var(--band-color),
+    inset 0 0 40px 10px var(--band-color);
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 15%,
+    black 85%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 15%,
+    black 85%,
+    transparent 100%
+  );
 }
 
 .section-inner {
@@ -1116,19 +1148,34 @@ textarea {
    ============================================ */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(40px) scale(0.98);
+  filter: blur(4px);
+  transition:
+    opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    filter 0.8s ease-out;
+  will-change: opacity, transform, filter;
 }
 
 .reveal.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  filter: blur(0px);
 }
 
 /* Staggered delay for cards */
 .skill-card,
 .project-card {
-  transition-delay: calc(var(--delay, 0) * 0.12s);
+  transition-delay: calc(var(--delay, 0) * 0.15s);
+}
+
+/* Section-level transition for diagonal band depth */
+.section {
+  transition: none; /* snap handles positioning */
+}
+
+.section-diagonal-accent {
+  transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* ============================================
@@ -1156,8 +1203,7 @@ textarea {
   }
 
   .section-diagonal-accent {
-    width: 30%;
-    opacity: 0.5;
+    --band-height: 100px;
   }
 }
 
@@ -1206,8 +1252,7 @@ textarea {
   }
 
   .section-diagonal-accent {
-    width: 20%;
-    opacity: 0.3;
+    --band-height: 80px;
   }
 
   .hero-name {

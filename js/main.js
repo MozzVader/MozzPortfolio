@@ -123,7 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       root: snapContainer,
-      threshold: 0.2,
+      threshold: 0.15,
+      rootMargin: '0px 0px -5% 0px',
     }
   );
 
@@ -145,20 +146,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ─── Navbar Background on Scroll ───
+  // ─── Navbar Background + Diagonal Band Parallax ───
   let lastScrollY = 0;
+  const diagonalBands = document.querySelectorAll('.section-diagonal-accent');
+  let rafId = null;
 
   snapContainer.addEventListener('scroll', () => {
-    const currentScrollY = snapContainer.scrollTop;
+    if (rafId) return;
+    rafId = requestAnimationFrame(() => {
+      const currentScrollY = snapContainer.scrollTop;
+      const containerHeight = snapContainer.clientHeight;
 
-    // Add/remove scrolled class for subtle visual feedback
-    if (currentScrollY > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
+      // Navbar scrolled state
+      if (currentScrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
 
-    lastScrollY = currentScrollY;
+      // Parallax on diagonal bands — subtle shift as you scroll
+      diagonalBands.forEach((band) => {
+        const section = band.closest('.section');
+        if (!section) return;
+
+        const sectionTop = section.offsetTop;
+        const sectionCenter = sectionTop + section.offsetHeight / 2;
+        const viewportCenter = currentScrollY + containerHeight / 2;
+        const distance = viewportCenter - sectionCenter;
+        const maxShift = 30; // max px of parallax movement
+        const shift = (distance / containerHeight) * maxShift;
+
+        band.style.transform = `rotate(var(--band-angle)) translateY(${shift}px)`;
+      });
+
+      lastScrollY = currentScrollY;
+      rafId = null;
+    });
   });
 
   // ─── Contact Form (placeholder handler) ───
