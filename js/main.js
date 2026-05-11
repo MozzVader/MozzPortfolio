@@ -587,6 +587,47 @@ document.addEventListener('DOMContentLoaded', () => {
   // Load projects from Supabase
   loadProjects();
 
+  // ─── Typewriter Effect ───
+  function initTypewriter() {
+    const container = document.getElementById('heroRole');
+    if (!container) return;
+    const textEl = container.querySelector('.typewriter-text');
+    if (!textEl) return;
+
+    // Full text: "Web Developer Freelance"
+    // "Freelance" gets gradient when fully typed
+    const plain = 'Web Developer ';
+    const gradient = 'Freelance';
+    const fullText = plain + gradient;
+    let i = 0;
+
+    // Pause before starting (let hero reveal finish)
+    const startDelay = 800;
+    const charDelay = 75;
+
+    setTimeout(() => {
+      textEl.textContent = '';
+      const interval = setInterval(() => {
+        if (i < fullText.length) {
+          // Check if we just finished typing "Freelance"
+          const charsLeft = fullText.length - i - 1;
+          if (charsLeft === 0) {
+            // Done — apply gradient to the last word
+            textEl.innerHTML = plain + '<span class="text-gradient">' + gradient + '</span>';
+          } else {
+            textEl.textContent = fullText.substring(0, i + 1);
+          }
+          i++;
+        } else {
+          clearInterval(interval);
+          textEl.innerHTML = plain + '<span class="text-gradient">' + gradient + '</span>';
+        }
+      }, charDelay);
+    }, startDelay);
+  }
+
+  initTypewriter();
+
   // ─── Contact Form (placeholder handler) ───
   if (contactForm) {
     contactForm.addEventListener('submit', (e) => {

@@ -738,6 +738,31 @@ textarea {
   background-clip: text;
 }
 
+/* ── Typewriter ── */
+.typewriter-text {
+  display: inline;
+}
+
+.typewriter-text .text-gradient {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  font-weight: 400;
+  color: var(--primary);
+  animation: cursorBlink 1s steps(1) infinite;
+  margin-left: 1px;
+}
+
+@keyframes cursorBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
 .hero-description {
   font-size: 1.1rem;
   color: var(--text-secondary);
