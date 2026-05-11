@@ -321,6 +321,195 @@ document.addEventListener('DOMContentLoaded', () => {
     MeshBackground.initAll();
   }
 
+  // ─── Supabase: Load Projects Dynamically ───
+  async function loadProjects() {
+    const container = document.getElementById('projects-container');
+    if (!container) return;
+
+    // Show loading skeletons
+    container.classList.add('loading');
+    container.innerHTML = `
+      <div class="project-skeleton"><div class="skeleton-image"></div><div class="skeleton-text"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+      <div class="project-skeleton"><div class="skeleton-image"></div><div class="skeleton-text"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+      <div class="project-skeleton"><div class="skeleton-image"></div><div class="skeleton-text"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+    `;
+
+    try {
+      if (typeof window.supabase === 'undefined') {
+        throw new Error('Supabase not loaded');
+      }
+
+      const supabase = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_ANON_KEY
+      );
+
+      const { data: projects, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('visible', true)
+        .order('sort_order', { ascending: true });
+
+      if (error) throw error;
+
+      container.classList.remove('loading');
+
+      if (!projects || projects.length === 0) {
+        container.innerHTML = `
+          <div class="projects-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <p>Proyectos próximamente...</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = projects.map((project, i) => {
+        const hasDemo = !!project.demo_url;
+        const hasRepo = !!project.repo_url;
+        const tags = Array.isArray(project.tags) ? project.tags : [];
+
+        // Build overlay buttons
+        let buttons = '';
+
+        // Expand button (always shown if image exists)
+        if (project.image_url) {
+          buttons += `
+            <button class="project-expand" data-image="${escapeAttr(project.image_url)}" aria-label="Ver imagen completa">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 3 21 3 21 9"/>
+                <polyline points="9 21 3 21 3 15"/>
+                <line x1="21" y1="3" x2="14" y2="10"/>
+                <line x1="3" y1="21" x2="10" y2="14"/>
+              </svg>
+            </button>`;
+        }
+
+        // Demo button
+        if (hasDemo) {
+          buttons += `
+            <a href="${escapeAttr(project.demo_url)}" class="project-link" aria-label="Ver demo" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>`;
+        }
+
+        // Repo button
+        if (hasRepo) {
+          buttons += `
+            <a href="${escapeAttr(project.repo_url)}" class="project-link" aria-label="Ver código" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </a>`;
+        }
+
+        // Image or placeholder
+        const imageContent = project.image_url
+          ? `<img src="${escapeAttr(project.image_url)}" alt="${escapeAttr(project.title)}" loading="lazy">`
+          : `<div class="project-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="placeholder-icon">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>`;
+
+        const tagsHTML = tags.map(t => `<span class="tag">${escapeHTML(t)}</span>`).join('');
+
+        return `
+          <article class="project-card" style="--delay: ${i}">
+            <div class="project-image">
+              ${imageContent}
+              ${buttons ? `<div class="project-overlay">${buttons}</div>` : ''}
+            </div>
+            <div class="project-info">
+              <h3 class="project-title">${escapeHTML(project.title)}</h3>
+              <p class="project-desc">${escapeHTML(project.description)}</p>
+              ${tagsHTML ? `<div class="project-tags">${tagsHTML}</div>` : ''}
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      // Attach expand button handlers
+      container.querySelectorAll('.project-expand').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openImageModal(btn.dataset.image);
+        });
+      });
+
+      // Apply reveal animation to cards
+      requestAnimationFrame(() => {
+        container.querySelectorAll('.project-card').forEach(card => {
+          card.classList.add('reveal');
+        });
+      });
+
+    } catch (err) {
+      console.error('Error loading projects:', err);
+      container.classList.remove('loading');
+      container.innerHTML = `
+        <div class="projects-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <p>No se pudieron cargar los proyectos</p>
+        </div>
+      `;
+    }
+  }
+
+  function escapeHTML(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function escapeAttr(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // ─── Image Modal ───
+  const imageModal = document.getElementById('imageModal');
+  const imageModalImg = document.getElementById('imageModalImg');
+  const imageModalOverlay = document.getElementById('imageModalOverlay');
+  const imageModalClose = document.getElementById('imageModalClose');
+
+  function openImageModal(src) {
+    if (!imageModal || !imageModalImg) return;
+    imageModalImg.src = src;
+    imageModal.setAttribute('aria-hidden', 'false');
+    imageModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeImageModal() {
+    if (!imageModal) return;
+    imageModal.classList.remove('active');
+    imageModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    // Clear src after transition to stop loading
+    setTimeout(() => { imageModalImg.src = ''; }, 300);
+  }
+
+  if (imageModalOverlay) imageModalOverlay.addEventListener('click', closeImageModal);
+  if (imageModalClose) imageModalClose.addEventListener('click', closeImageModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && imageModal && imageModal.classList.contains('active')) {
+      closeImageModal();
+    }
+  });
+
+  // Load projects from Supabase
+  loadProjects();
+
   // ─── Contact Form (placeholder handler) ───
   if (contactForm) {
     contactForm.addEventListener('submit', (e) => {

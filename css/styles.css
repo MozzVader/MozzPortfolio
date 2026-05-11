@@ -1141,6 +1141,175 @@ textarea {
   text-transform: uppercase;
 }
 
+/* Project loading skeleton */
+.projects-grid.loading {
+  min-height: 200px;
+}
+
+.project-skeleton {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.project-skeleton .skeleton-image {
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(110deg, var(--border) 8%, var(--surface) 18%, var(--border) 33%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+.project-skeleton .skeleton-text {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.project-skeleton .skeleton-line {
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(110deg, var(--border) 8%, var(--surface) 18%, var(--border) 33%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+.project-skeleton .skeleton-line:nth-child(1) { width: 60%; }
+.project-skeleton .skeleton-line:nth-child(2) { width: 100%; }
+.project-skeleton .skeleton-line:nth-child(3) { width: 40%; }
+
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+/* Project empty state */
+.projects-empty {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--text-muted);
+}
+
+.projects-empty svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.3;
+  margin-bottom: 1rem;
+}
+
+.projects-empty p {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Project image (when loaded from Supabase) */
+.project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Expand button (image modal trigger) */
+.project-expand {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  transition: all var(--transition);
+}
+
+.project-expand:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
+}
+
+/* ============================================
+   IMAGE MODAL
+   ============================================ */
+.image-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.image-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.image-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.image-modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  z-index: 2;
+  transition: all var(--transition);
+}
+
+.image-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.image-modal-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.image-modal-content {
+  position: relative;
+  z-index: 1;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-modal-content img {
+  max-width: 90vw;
+  max-height: 85vh;
+  border-radius: 12px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.image-modal.active .image-modal-content img {
+  transform: scale(1);
+}
+
 /* ============================================
    CONTACT
    ============================================ */
