@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let editingProjectId = null;
   let deleteTargetId = null;
+  let oldImageUrl = null; // track previous image to clean up storage
 
   // ─── Theme Toggle ───
   function initAdminTheme() {
@@ -221,6 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetForm() {
     projectForm.reset();
     editingProjectId = null;
+    oldImageUrl = null;
     imageUrlInput.value = '';
     formError.style.display = 'none';
     uploadError.style.display = 'none';
@@ -255,6 +257,8 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error fetching project:', error);
       return;
     }
+
+    oldImageUrl = project.image_url || null;
 
     document.getElementById('projectId').value = project.id;
     document.getElementById('projectTitle').value = project.title;
@@ -312,6 +316,12 @@ document.addEventListener('DOMContentLoaded', () => {
           .from('projects')
           .update({ title, description, tags, image_url, demo_url, repo_url, sort_order, visible })
           .eq('id', editingProjectId);
+
+        // Clean up old image from storage if it changed
+        if (oldImageUrl && oldImageUrl !== image_url && getStorageFilePath(oldImageUrl)) {
+          deleteOldStorageImage(oldImageUrl);
+        }
+        oldImageUrl = null;
       } else {
         result = await supabase
           .from('projects')
@@ -447,12 +457,24 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.querySelector('span').textContent = 'Eliminando...';
 
     try {
-      const { error } = await supabase
+      // Fetch image URL before deleting the row
+      const { data: projToDelete } = await supabase
+        .from('projects')
+        .select('image_url')
+        .eq('id', deleteTargetId)
+        .single();
+
+      const oldImg = projToDelete?.image_url || null;
+
+      const { error: delError } = await supabase
         .from('projects')
         .delete()
         .eq('id', deleteTargetId);
 
-      if (error) throw error;
+      if (delError) throw delError;
+
+      // Clean up image from storage
+      if (oldImg) deleteOldStorageImage(oldImg);
 
       closeDeleteModal();
       loadProjects();
@@ -476,6 +498,28 @@ document.addEventListener('DOMContentLoaded', () => {
   function escapeAttr(str) {
     if (!str) return '';
     return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // Extract file path from Supabase Storage public URL
+  function getStorageFilePath(url) {
+    if (!url) return null;
+    // URL format: https://<project>.supabase.co/storage/v1/object/public/<bucket>/<path>
+    const match = url.match(/\/storage\/v1\/object\/public\/[^/]+\/(.+)$/);
+    return match ? match[1] : null;
+  }
+
+  // Delete old image from Supabase Storage (silent — don't fail the save)
+  async function deleteOldStorageImage(url) {
+    const filePath = getStorageFilePath(url);
+    if (!filePath) return;
+    try {
+      const { error } = await supabase.storage
+        .from(SUPABASE_BUCKET)
+        .remove([filePath]);
+      if (error) console.warn('Could not delete old image:', error.message);
+    } catch (e) {
+      console.warn('Could not delete old image:', e.message);
+    }
   }
 
   // ─── Init ───
