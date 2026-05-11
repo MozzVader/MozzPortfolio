@@ -25,10 +25,8 @@
   --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Diagonal angle */
+  /* Diagonal angle (hero lines, dividers) */
   --diag-angle: 18deg;
-  --band-angle: -20deg;
-  --band-height: 120px;
 }
 
 /* ---------- Dark Theme (default) ---------- */
@@ -51,8 +49,6 @@
   --hero-glow: radial-gradient(ellipse at 50% 50%, rgba(127, 3, 252, 0.12) 0%, transparent 70%);
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
   --shadow-btn: 0 4px 16px rgba(127, 3, 252, 0.3);
-  --band-color: rgba(127, 3, 252, 0.07);
-  --band-edge: rgba(127, 3, 252, 0);
 }
 
 /* ---------- Light Theme ---------- */
@@ -75,8 +71,6 @@
   --hero-glow: radial-gradient(ellipse at 50% 50%, rgba(127, 3, 252, 0.08) 0%, transparent 70%);
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
   --shadow-btn: 0 4px 16px rgba(127, 3, 252, 0.2);
-  --band-color: rgba(127, 3, 252, 0.05);
-  --band-edge: rgba(127, 3, 252, 0);
 }
 
 /* ---------- Reset ---------- */
@@ -466,44 +460,54 @@ textarea {
   border-radius: 2px;
 }
 
-/* Diagonal Band — full-width horizontal stripe behind content */
-.section-diagonal-accent {
+/* ============================================
+   MESH BACKGROUND (Low-poly triangle pattern)
+   ============================================ */
+.section-mesh-bg {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 160vw;
-  height: var(--band-height);
-  margin-top: calc(var(--band-height) / -2);
-  margin-left: -80vw;
-  background: linear-gradient(
-    to right,
-    var(--band-edge) 0%,
-    var(--band-color) 20%,
-    var(--band-color) 80%,
-    var(--band-edge) 100%
-  );
-  transform: rotate(var(--band-angle));
+  inset: 0;
   z-index: 0;
   pointer-events: none;
-  transition: background var(--transition);
-  /* Subtle depth shadow */
-  box-shadow:
-    0 0 60px 20px var(--band-color),
-    inset 0 0 40px 10px var(--band-color);
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 15%,
-    black 85%,
+  overflow: hidden;
+}
+
+.mesh-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Top shadow — creates illusion that mesh floats below the viewport */
+.mesh-top-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0%,
+    var(--bg) 30%,
     transparent 100%
   );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 15%,
-    black 85%,
+  z-index: 2;
+}
+
+/* Bottom shadow — creates depth at the bottom */
+.mesh-bottom-shadow {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(
+    to top,
+    var(--bg) 0%,
+    var(--bg) 30%,
     transparent 100%
   );
+  z-index: 2;
 }
 
 .section-inner {
@@ -1261,10 +1265,7 @@ textarea {
   transition-delay: calc(var(--delay, 0) * 0.15s);
 }
 
-/* Section diagonal band transition */
-.section-diagonal-accent {
-  transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
+
 
 /* ============================================
    RESPONSIVE
@@ -1290,22 +1291,9 @@ textarea {
     gap: 2rem;
   }
 
-  .section-diagonal-accent {
-    --band-height: 100px;
-  }
-
-  .section-indicators {
-    right: 12px;
-    gap: 10px;
-  }
-
-  .section-dot {
-    width: 8px;
-    height: 8px;
-  }
-
-  .section-dot.active {
-    height: 22px;
+  .section-mesh-bg .mesh-top-shadow,
+  .section-mesh-bg .mesh-bottom-shadow {
+    height: 80px;
   }
 }
 
@@ -1353,8 +1341,9 @@ textarea {
     min-width: 140px;
   }
 
-  .section-diagonal-accent {
-    --band-height: 80px;
+  .section-mesh-bg .mesh-top-shadow,
+  .section-mesh-bg .mesh-bottom-shadow {
+    height: 60px;
   }
 
   .section-indicators {

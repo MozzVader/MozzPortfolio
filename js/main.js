@@ -314,19 +314,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ─── Diagonal Band Parallax (mouse-based) ───
-  const diagonalBands = document.querySelectorAll('.section-diagonal-accent');
+  // ─── Diagonal Band Parallax → replaced by Mesh Background ───
 
-  document.addEventListener('mousemove', (e) => {
-    const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;  // -1 to 1
-    const mouseY = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
-
-    diagonalBands.forEach((band) => {
-      const shiftX = mouseX * 15;
-      const shiftY = mouseY * 8;
-      band.style.transform = `rotate(var(--band-angle)) translate(${shiftX}px, ${shiftY}px)`;
-    });
-  });
+  // ─── Initialize Mesh Backgrounds ───
+  if (typeof MeshBackground !== 'undefined') {
+    MeshBackground.initAll();
+  }
 
   // ─── Contact Form (placeholder handler) ───
   if (contactForm) {
