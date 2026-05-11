@@ -74,6 +74,56 @@
   margin-bottom: 1rem;
 }
 
+/* ── Login Divider ── */
+.admin-login-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.admin-login-divider::before,
+.admin-login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.admin-login-divider span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ── Google Button ── */
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-google:hover {
+  border-color: var(--text-muted);
+  background: var(--bg-alt);
+}
+
+.btn-google:active {
+  transform: scale(0.98);
+}
+
 /* ── Dashboard ── */
 .admin-dashboard {
   min-height: 100vh;

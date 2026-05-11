@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const deleteProjectName = document.getElementById('deleteProjectName');
   const projectsList = document.getElementById('projectsList');
   const adminThemeToggle = document.getElementById('adminThemeToggle');
+  const googleLoginBtn = document.getElementById('googleLoginBtn');
 
   let editingProjectId = null;
   let deleteTargetId = null;
@@ -107,6 +108,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     showDashboard();
+  });
+
+  // Google OAuth Login
+  googleLoginBtn.addEventListener('click', async () => {
+    loginError.style.display = 'none';
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin + window.location.pathname
+      }
+    });
+    if (error) {
+      loginError.textContent = 'Error al conectar con Google: ' + error.message;
+      loginError.style.display = 'block';
+    }
   });
 
   // Logout
