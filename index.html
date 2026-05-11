@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mozz Vader — Web Developer Freelance. Creo experiencias web modernas, rápidas y accesibles.">
+  <meta name="theme-color" content="#0a0a0f">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Mozz Vader | Web Developer Freelance">
+  <meta property="og:description" content="Creo experiencias web modernas, rápidas y accesibles.">
+  <meta property="og:type" content="website">
+
+  <title>Mozz Vader | Web Developer</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <a href="#hero" class="nav-logo">
+      <span class="logo-bracket">&lt;</span>Mozz<span class="logo-dot">.</span><span class="logo-bracket">/&gt;</span>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero" class="nav-link active" data-section="hero">Inicio</a></li>
+      <li><a href="#about" class="nav-link" data-section="about">Sobre mí</a></li>
+      <li><a href="#skills" class="nav-link" data-section="skills">Skills</a></li>
+      <li><a href="#projects" class="nav-link" data-section="projects">Proyectos</a></li>
+      <li><a href="#contact" class="nav-link" data-section="contact">Contacto</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== MOBILE MENU OVERLAY ===== -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul class="mobile-nav-links">
+      <li><a href="#hero" class="mobile-nav-link active" data-section="hero">Inicio</a></li>
+      <li><a href="#about" class="mobile-nav-link" data-section="about">Sobre mí</a></li>
+      <li><a href="#skills" class="mobile-nav-link" data-section="skills">Skills</a></li>
+      <li><a href="#projects" class="mobile-nav-link" data-section="projects">Proyectos</a></li>
+      <li><a href="#contact" class="mobile-nav-link" data-section="contact">Contacto</a></li>
+    </ul>
+  </div>
+
+  <!-- ===== MAIN CONTENT (snap scroll container) ===== -->
+  <main class="snap-container" id="snapContainer">
+
+    <!-- ——— HERO ——— -->
+    <section id="hero" class="section hero-section">
+      <!-- Decorative diagonal lines background -->
+      <div class="hero-diagonals" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+
+      <div class="hero-content reveal">
+        <p class="hero-greeting">Hola, soy</p>
+        <h1 class="hero-name">Mozz Vader</h1>
+        <h2 class="hero-role">
+          Web Developer <span class="text-gradient">Freelance</span>
+        </h2>
+        <p class="hero-description">
+          Creo experiencias web modernas, rápidas y accesibles que conectan ideas con personas.
+        </p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn btn-primary">Ver proyectos</a>
+          <a href="#contact" class="btn btn-outline">Contactame</a>
+        </div>
+      </div>
+
+      <div class="scroll-indicator" aria-hidden="true">
+        <span class="scroll-text">Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- ——— ABOUT ——— -->
+    <section id="about" class="section about-section">
+      <!-- Decorative diagonal accent -->
+      <div class="section-diagonal-accent" aria-hidden="true"></div>
+
+      <div class="section-inner">
+        <header class="section-header reveal">
+          <span class="section-number">01</span>
+          <h2 class="section-title">Sobre mí</h2>
+          <div class="section-divider">
+            <span class="divider-line"></span>
+            <span class="divider-diamond"></span>
+          </div>
+        </header>
+
+        <div class="about-grid reveal">
+          <div class="about-text">
+            <p>
+              Soy un desarrollador web freelance con pasión por construir interfaces que sean tanto visualmente atractivas como técnicamente sólidas. Me motiva transformar ideas en productos digitales que las personas disfruten usar.
+            </p>
+            <p>
+              Mi enfoque se centra en las bases: HTML semántico, CSS moderno y JavaScript vanilla. Creo que dominar los fundamentos es la clave para crear experiencias web que rindan bien, sean accesibles y mantengan un código limpio y mantenible.
+            </p>
+            <p>
+              Aunque trabajo principalmente con tecnologías del lado del cliente, también tengo experiencia con React para proyectos que lo requieren. Siempre estoy aprendiendo y explorando nuevas herramientas para mejorar mi flujo de trabajo.
+            </p>
+          </div>
+
+          <div class="about-details">
+            <div class="detail-card">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="detail-icon">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              <div>
+                <span class="detail-label">Ubicación</span>
+                <span class="detail-value">Argentina</span>
+              </div>
+            </div>
+            <div class="detail-card">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="detail-icon">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+              <div>
+                <span class="detail-label">Modalidad</span>
+                <span class="detail-value">Freelance / Remoto</span>
+              </div>
+            </div>
+            <div class="detail-card">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="detail-icon">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+              <div>
+                <span class="detail-label">Disponibilidad</span>
+                <span class="detail-value">Abierto a proyectos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ——— SKILLS ——— -->
+    <section id="skills" class="section skills-section">
+      <div class="section-diagonal-accent" aria-hidden="true"></div>
+
+      <div class="section-inner">
+        <header class="section-header reveal">
+          <span class="section-number">02</span>
+          <h2 class="section-title">Skills</h2>
+          <div class="section-divider">
+            <span class="divider-line"></span>
+            <span class="divider-diamond"></span>
+          </div>
+        </header>
+
+        <div class="skills-grid">
+          <div class="skill-card reveal" style="--delay: 0">
+            <div class="skill-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="skill-icon">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <h3 class="skill-name">HTML5</h3>
+            <p class="skill-desc">Estructura semántica, accesibilidad y SEO como base de cada proyecto.</p>
+            <div class="skill-level">
+              <div class="skill-bar" style="--level: 95%"></div>
+            </div>
+          </div>
+
+          <div class="skill-card reveal" style="--delay: 1">
+            <div class="skill-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="skill-icon">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <h3 class="skill-name">CSS3</h3>
+            <p class="skill-desc">Layouts modernos con Grid, Flexbox, animaciones y diseño responsive.</p>
+            <div class="skill-level">
+              <div class="skill-bar" style="--level: 90%"></div>
+            </div>
+          </div>
+
+          <div class="skill-card reveal" style="--delay: 2">
+            <div class="skill-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="skill-icon">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <h3 class="skill-name">JavaScript</h3>
+            <p class="skill-desc">Vanilla JS para interactividad, manipulación del DOM y lógica de negocio.</p>
+            <div class="skill-level">
+              <div class="skill-bar" style="--level: 85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-card reveal" style="--delay: 3">
+            <div class="skill-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="skill-icon">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="4"/>
+                <line x1="21.17" y1="8" x2="12" y2="8"/>
+                <line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
+                <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
+              </svg>
+            </div>
+            <h3 class="skill-name">React</h3>
+            <p class="skill-desc">Componentes, hooks y estado para proyectos que requieren una librería UI.</p>
+            <div class="skill-level">
+              <div class="skill-bar" style="--level: 55%"></div>
+            </div>
+          </div>
+
+          <div class="skill-card reveal" style="--delay: 4">
+            <div class="skill-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="skill-icon">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                <line x1="12" y1="18" x2="12.01" y2="18"/>
+              </svg>
+            </div>
+            <h3 class="skill-name">Responsive Design</h3>
+            <p class="skill-desc">Mobile-first con layouts que se adaptan fluidamente a cualquier pantalla.</p>
+            <div class="skill-level">
+              <div class="skill-bar" style="--level: 92%"></div>
+            </div>
+          </div>
+
+          <div class="skill-card reveal" style="--delay: 5">
+            <div class="skill-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="skill-icon">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+                <line x1="14" y1="4" x2="10" y2="20"/>
+              </svg>
+            </div>
+            <h3 class="skill-name">Git & GitHub</h3>
+            <p class="skill-desc">Control de versiones, ramas, Pull Requests y colaboración en repos.</p>
+            <div class="skill-level">
+              <div class="skill-bar" style="--level: 80%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ——— PROJECTS ——— -->
+    <section id="projects" class="section projects-section">
+      <div class="section-diagonal-accent" aria-hidden="true"></div>
+
+      <div class="section-inner">
+        <header class="section-header reveal">
+          <span class="section-number">03</span>
+          <h2 class="section-title">Proyectos</h2>
+          <div class="section-divider">
+            <span class="divider-line"></span>
+            <span class="divider-diamond"></span>
+          </div>
+        </header>
+
+        <div class="projects-grid">
+          <!-- Project 1 -->
+          <article class="project-card reveal" style="--delay: 0">
+            <div class="project-image">
+              <div class="project-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="placeholder-icon">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+              </div>
+              <div class="project-overlay">
+                <a href="#" class="project-link" aria-label="Ver demo" target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+                <a href="#" class="project-link" aria-label="Ver código" target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="project-info">
+              <h3 class="project-title">Proyecto Uno</h3>
+              <p class="project-desc">Descripcion breve del proyecto. Placeholder para completar con detalles reales.</p>
+              <div class="project-tags">
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+                <span class="tag">JS</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="project-card reveal" style="--delay: 1">
+            <div class="project-image">
+              <div class="project-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="placeholder-icon">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+              </div>
+              <div class="project-overlay">
+                <a href="#" class="project-link" aria-label="Ver demo" target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+                <a href="#" class="project-link" aria-label="Ver código" target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="project-info">
+              <h3 class="project-title">Proyecto Dos</h3>
+              <p class="project-desc">Descripcion breve del proyecto. Placeholder para completar con detalles reales.</p>
+              <div class="project-tags">
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="project-card reveal" style="--delay: 2">
+            <div class="project-image">
+              <div class="project-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="placeholder-icon">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+              </div>
+              <div class="project-overlay">
+                <a href="#" class="project-link" aria-label="Ver demo" target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+                <a href="#" class="project-link" aria-label="Ver código" target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="project-info">
+              <h3 class="project-title">Proyecto Tres</h3>
+              <p class="project-desc">Descripcion breve del proyecto. Placeholder para completar con detalles reales.</p>
+              <div class="project-tags">
+                <span class="tag">JS</span>
+                <span class="tag">React</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ——— CONTACT ——— -->
+    <section id="contact" class="section contact-section">
+      <div class="section-diagonal-accent" aria-hidden="true"></div>
+
+      <div class="section-inner">
+        <header class="section-header reveal">
+          <span class="section-number">04</span>
+          <h2 class="section-title">Contacto</h2>
+          <div class="section-divider">
+            <span class="divider-line"></span>
+            <span class="divider-diamond"></span>
+          </div>
+        </header>
+
+        <div class="contact-grid reveal">
+          <form class="contact-form" id="contactForm" action="#" method="POST">
+            <div class="form-group">
+              <label for="name">Nombre</label>
+              <input type="text" id="name" name="name" placeholder="Tu nombre" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="tu@email.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="subject">Asunto</label>
+              <input type="text" id="subject" name="subject" placeholder="¿En qué puedo ayudarte?" required>
+            </div>
+            <div class="form-group">
+              <label for="message">Mensaje</label>
+              <textarea id="message" name="message" rows="4" placeholder="Contame sobre tu proyecto..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-submit">
+              <span>Enviar mensaje</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </form>
+
+          <div class="contact-sidebar">
+            <p class="contact-text">
+              ¿Tenés un proyecto en mente o querés colaborar? Escribime y lo charlamos. También me encontrás en:
+            </p>
+
+            <div class="social-links">
+              <a href="https://github.com/MozzVader" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                <span>GitHub</span>
+              </a>
+              <a href="https://linkedin.com/in/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                <span>LinkedIn</span>
+              </a>
+              <a href="mailto:mozz@example.com" class="social-link" aria-label="Email">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <span>Email</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 Mozz Vader. Hecho con HTML, CSS y JS.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
