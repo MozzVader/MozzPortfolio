@@ -375,36 +375,39 @@ textarea {
   justify-content: center;
   overflow: hidden;
   padding: calc(var(--nav-height) + 2rem) 2rem 2rem;
-  /* Transition between sections */
+  /* Default: invisible, no transition yet */
   opacity: 0;
-  transform: translateY(60px) scale(0.97);
-  filter: blur(3px);
-  transition:
-    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.7s ease-out;
+  transform: translateY(60px);
   pointer-events: none;
-  will-change: opacity, transform, filter;
+  /* No will-change here — applied only during transitions via JS */
 }
 
+/* Only the active section is visible and interactive */
 .section.active {
   opacity: 1;
-  transform: translateY(0) scale(1);
-  filter: blur(0px);
+  transform: translateY(0);
   pointer-events: auto;
+  z-index: 2;
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Leaving state — old section animates out */
+.section.leaving {
+  opacity: 0;
   z-index: 1;
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .section.leaving-up {
-  opacity: 0;
-  transform: translateY(-60px) scale(0.97);
-  filter: blur(3px);
+  transform: translateY(-40px);
 }
 
 .section.leaving-down {
-  opacity: 0;
-  transform: translateY(60px) scale(0.97);
-  filter: blur(3px);
+  transform: translateY(40px);
 }
 
 .section-inner {

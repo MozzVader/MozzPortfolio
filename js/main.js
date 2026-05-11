@@ -107,16 +107,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const oldSection = sections[currentIndex];
     const newSection = sections[newIndex];
 
-    // Reset any leaving classes
+    // ── Apply will-change ONLY to transitioning sections ──
+    oldSection.style.willChange = 'opacity, transform';
+    newSection.style.willChange = 'opacity, transform';
+
+    // Reset any leaving/active classes on ALL sections
     sections.forEach(s => {
-      s.classList.remove('active', 'leaving-up', 'leaving-down');
+      s.classList.remove('active', 'leaving', 'leaving-up', 'leaving-down');
     });
 
     // Set leaving direction on old section
+    oldSection.classList.add('leaving');
     oldSection.classList.add(direction === 'down' ? 'leaving-up' : 'leaving-down');
 
     // Activate new section (trigger enter transition)
-    // Small delay so the leaving animation starts first
     requestAnimationFrame(() => {
       newSection.classList.add('active');
     });
@@ -145,8 +149,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Allow new transitions after this one finishes
     setTimeout(() => {
-      // Clean up old section
-      oldSection.classList.remove('leaving-up', 'leaving-down');
+      // Clean up old section — remove leaving classes
+      oldSection.classList.remove('leaving', 'leaving-up', 'leaving-down');
+
+      // ── Remove will-change after transition completes ──
+      oldSection.style.willChange = '';
+      newSection.style.willChange = '';
 
       isTransitioning = false;
 
