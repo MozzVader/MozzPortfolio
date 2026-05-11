@@ -70,10 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ─── Active Nav Link (Intersection Observer) ───
+  // ─── Active Nav Link + Section Dots (Intersection Observer) ───
   const sections = document.querySelectorAll('.section');
   const navLinks = document.querySelectorAll('.nav-link[data-section]');
   const mobileLinks = document.querySelectorAll('.mobile-nav-link[data-section]');
+  const sectionDots = document.querySelectorAll('.section-dot[data-section]');
 
   const navObserver = new IntersectionObserver(
     (entries) => {
@@ -88,6 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
           mobileLinks.forEach((link) => {
             link.classList.toggle('active', link.dataset.section === id);
           });
+
+          sectionDots.forEach((dot) => {
+            dot.classList.toggle('active', dot.dataset.section === id);
+          });
         }
       });
     },
@@ -98,6 +103,21 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 
   sections.forEach((section) => navObserver.observe(section));
+
+  // ─── Section Dots Click Navigation ───
+  sectionDots.forEach((dot) => {
+    dot.addEventListener('click', () => {
+      const targetId = dot.dataset.section;
+      const target = document.getElementById(targetId);
+
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
+    });
+  });
 
   // ─── Reveal Animations (Intersection Observer) ───
   const revealElements = document.querySelectorAll('.reveal');
