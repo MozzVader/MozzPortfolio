@@ -1,6 +1,7 @@
 /* ============================================
    MOZZ VADER — PORTFOLIO
    Main JavaScript
+   Custom smooth scroll engine + section transitions
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -19,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (saved) {
       html.setAttribute('data-theme', saved);
     } else {
-      // Check system preference
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
     }
@@ -56,151 +56,267 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Close menu on link click
   document.querySelectorAll('.mobile-nav-link').forEach(link => {
     link.addEventListener('click', () => {
       closeMenu();
+      const sectionId = link.dataset.section;
+      const index = sectionData.findIndex(s => s.id === sectionId);
+      if (index !== -1) goToSection(index);
     });
   });
 
-  // Close menu on Escape key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
       closeMenu();
     }
   });
 
-  // ─── Active Nav Link + Section Dots (Intersection Observer) ───
-  const sections = document.querySelectorAll('.section');
+  // ============================================
+  // CUSTOM SCROLL ENGINE
+  // ============================================
+  const sections = Array.from(document.querySelectorAll('.section'));
   const navLinks = document.querySelectorAll('.nav-link[data-section]');
   const mobileLinks = document.querySelectorAll('.mobile-nav-link[data-section]');
   const sectionDots = document.querySelectorAll('.section-dot[data-section]');
 
-  const navObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
+  // Section metadata
+  const sectionData = sections.map(section => ({
+    el: section,
+    id: section.id,
+  }));
 
-          navLinks.forEach((link) => {
-            link.classList.toggle('active', link.dataset.section === id);
-          });
+  let currentIndex = 0;
+  let isTransitioning = false;
+  const TRANSITION_DURATION = 900; // ms — matches CSS transition
+  const COOLDOWN = 400; // ms after transition before accepting new input
+  let cooldownTimer = null;
 
-          mobileLinks.forEach((link) => {
-            link.classList.toggle('active', link.dataset.section === id);
-          });
+  // ─── Navigate to Section ───
+  function goToSection(newIndex, direction) {
+    if (isTransitioning) return;
+    if (newIndex < 0 || newIndex >= sections.length) return;
+    if (newIndex === currentIndex) return;
 
-          sectionDots.forEach((dot) => {
-            dot.classList.toggle('active', dot.dataset.section === id);
-          });
-        }
-      });
-    },
-    {
-      root: snapContainer,
-      threshold: 0.55,
+    isTransitioning = true;
+
+    // Auto-detect direction if not provided
+    if (direction === undefined) {
+      direction = newIndex > currentIndex ? 'down' : 'up';
     }
-  );
 
-  sections.forEach((section) => navObserver.observe(section));
+    const oldSection = sections[currentIndex];
+    const newSection = sections[newIndex];
 
-  // ─── Section Dots Click Navigation ───
+    // Reset any leaving classes
+    sections.forEach(s => {
+      s.classList.remove('active', 'leaving-up', 'leaving-down');
+    });
+
+    // Set leaving direction on old section
+    oldSection.classList.add(direction === 'down' ? 'leaving-up' : 'leaving-down');
+
+    // Activate new section (trigger enter transition)
+    // Small delay so the leaving animation starts first
+    requestAnimationFrame(() => {
+      newSection.classList.add('active');
+    });
+
+    // Update navigation indicators
+    updateNavIndicators(newIndex);
+
+    // Animate skill bars if entering skills section
+    if (newSection.id === 'skills') {
+      setTimeout(() => {
+        newSection.querySelectorAll('.skill-card').forEach(card => {
+          card.classList.add('animated');
+        });
+      }, 300);
+    }
+
+    // Reset skill bars when leaving skills section
+    if (oldSection.id === 'skills') {
+      oldSection.querySelectorAll('.skill-card').forEach(card => {
+        card.classList.remove('animated');
+      });
+    }
+
+    const oldIndex = currentIndex;
+    currentIndex = newIndex;
+
+    // Allow new transitions after this one finishes
+    setTimeout(() => {
+      // Clean up old section
+      oldSection.classList.remove('leaving-up', 'leaving-down');
+
+      isTransitioning = false;
+
+      // Cooldown to prevent rapid re-triggering
+      cooldownTimer = setTimeout(() => {
+        cooldownTimer = null;
+      }, COOLDOWN);
+    }, TRANSITION_DURATION);
+  }
+
+  // ─── Update Navigation Indicators ───
+  function updateNavIndicators(index) {
+    const id = sectionData[index].id;
+
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.dataset.section === id);
+    });
+
+    mobileLinks.forEach(link => {
+      link.classList.toggle('active', link.dataset.section === id);
+    });
+
+    sectionDots.forEach(dot => {
+      dot.classList.toggle('active', dot.dataset.section === id);
+    });
+
+    // Navbar scrolled state
+    if (index > 0) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  }
+
+  // ─── Wheel Handler (desktop) ───
+  let wheelAccumulator = 0;
+  const WHEEL_THRESHOLD = 50; // min delta to trigger navigation
+  let wheelTimer = null;
+
+  snapContainer.addEventListener('wheel', (e) => {
+    e.preventDefault();
+
+    if (isTransitioning) return;
+
+    // Accumulate scroll delta
+    wheelAccumulator += e.deltaY;
+
+    // Clear any pending reset
+    clearTimeout(wheelTimer);
+
+    // Check if threshold reached
+    if (Math.abs(wheelAccumulator) >= WHEEL_THRESHOLD) {
+      const direction = wheelAccumulator > 0 ? 'down' : 'up';
+      wheelAccumulator = 0;
+
+      if (direction === 'down') {
+        goToSection(currentIndex + 1, 'down');
+      } else {
+        goToSection(currentIndex - 1, 'up');
+      }
+    } else {
+      // Reset accumulator after inactivity
+      wheelTimer = setTimeout(() => {
+        wheelAccumulator = 0;
+      }, 200);
+    }
+  }, { passive: false });
+
+  // ─── Touch Handler (mobile) ───
+  let touchStartY = 0;
+  let touchStartTime = 0;
+  const TOUCH_THRESHOLD = 60; // min px swipe
+
+  snapContainer.addEventListener('touchstart', (e) => {
+    if (isTransitioning) return;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, { passive: true });
+
+  snapContainer.addEventListener('touchend', (e) => {
+    if (isTransitioning) return;
+
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaY = touchStartY - touchEndY;
+    const elapsed = Date.now() - touchStartTime;
+
+    // Only trigger if swipe was fast enough and long enough
+    if (elapsed < 500 && Math.abs(deltaY) > TOUCH_THRESHOLD) {
+      if (deltaY > 0) {
+        goToSection(currentIndex + 1, 'down');
+      } else {
+        goToSection(currentIndex - 1, 'up');
+      }
+    }
+  }, { passive: true });
+
+  // ─── Keyboard Navigation ───
+  document.addEventListener('keydown', (e) => {
+    if (isTransitioning) return;
+    // Don't capture if user is typing in a form field
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+    switch (e.key) {
+      case 'ArrowDown':
+      case 'PageDown':
+        e.preventDefault();
+        goToSection(currentIndex + 1, 'down');
+        break;
+      case 'ArrowUp':
+      case 'PageUp':
+        e.preventDefault();
+        goToSection(currentIndex - 1, 'up');
+        break;
+      case 'Home':
+        e.preventDefault();
+        goToSection(0, 'up');
+        break;
+      case 'End':
+        e.preventDefault();
+        goToSection(sections.length - 1, 'down');
+        break;
+    }
+  });
+
+  // ─── Section Dots Click ───
   sectionDots.forEach((dot) => {
     dot.addEventListener('click', () => {
       const targetId = dot.dataset.section;
-      const target = document.getElementById(targetId);
-
-      if (target) {
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
+      const index = sectionData.findIndex(s => s.id === targetId);
+      if (index !== -1 && index !== currentIndex) {
+        goToSection(index);
       }
     });
   });
 
-  // ─── Reveal Animations (Intersection Observer) ───
-  const revealElements = document.querySelectorAll('.reveal');
-
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-
-          // Animate skill bars inside this element
-          const skillBars = entry.target.querySelectorAll('.skill-bar');
-          skillBars.forEach((bar) => {
-            bar.closest('.skill-card').classList.add('animated');
-          });
-
-          // If the element itself is a skill card
-          if (entry.target.classList.contains('skill-card')) {
-            entry.target.classList.add('animated');
-          }
-        }
-      });
-    },
-    {
-      root: snapContainer,
-      threshold: 0.15,
-      rootMargin: '0px 0px -5% 0px',
-    }
-  );
-
-  revealElements.forEach((el) => revealObserver.observe(el));
-
-  // ─── Smooth Scroll for Nav Links ───
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+  // ─── Navbar Links Click ───
+  document.querySelectorAll('.nav-link[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', (e) => {
       e.preventDefault();
       const targetId = anchor.getAttribute('href').substring(1);
-      const target = document.getElementById(targetId);
-
-      if (target) {
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
+      const index = sectionData.findIndex(s => s.id === targetId);
+      if (index !== -1 && index !== currentIndex) {
+        goToSection(index);
       }
     });
   });
 
-  // ─── Navbar Background + Diagonal Band Parallax ───
-  let lastScrollY = 0;
-  const diagonalBands = document.querySelectorAll('.section-diagonal-accent');
-  let rafId = null;
-
-  snapContainer.addEventListener('scroll', () => {
-    if (rafId) return;
-    rafId = requestAnimationFrame(() => {
-      const currentScrollY = snapContainer.scrollTop;
-      const containerHeight = snapContainer.clientHeight;
-
-      // Navbar scrolled state
-      if (currentScrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
+  // ─── Hero CTA Links ───
+  document.querySelectorAll('.hero-cta a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = anchor.getAttribute('href').substring(1);
+      const index = sectionData.findIndex(s => s.id === targetId);
+      if (index !== -1 && index !== currentIndex) {
+        goToSection(index);
       }
+    });
+  });
 
-      // Parallax on diagonal bands — subtle shift as you scroll
-      diagonalBands.forEach((band) => {
-        const section = band.closest('.section');
-        if (!section) return;
+  // ─── Diagonal Band Parallax (mouse-based) ───
+  const diagonalBands = document.querySelectorAll('.section-diagonal-accent');
 
-        const sectionTop = section.offsetTop;
-        const sectionCenter = sectionTop + section.offsetHeight / 2;
-        const viewportCenter = currentScrollY + containerHeight / 2;
-        const distance = viewportCenter - sectionCenter;
-        const maxShift = 30; // max px of parallax movement
-        const shift = (distance / containerHeight) * maxShift;
+  document.addEventListener('mousemove', (e) => {
+    const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;  // -1 to 1
+    const mouseY = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
 
-        band.style.transform = `rotate(var(--band-angle)) translateY(${shift}px)`;
-      });
-
-      lastScrollY = currentScrollY;
-      rafId = null;
+    diagonalBands.forEach((band) => {
+      const shiftX = mouseX * 15;
+      const shiftY = mouseY * 8;
+      band.style.transform = `rotate(var(--band-angle)) translate(${shiftX}px, ${shiftY}px)`;
     });
   });
 
@@ -212,11 +328,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const formData = new FormData(contactForm);
       const data = Object.fromEntries(formData.entries());
 
-      // Basic validation visual feedback
       const btn = contactForm.querySelector('.btn-submit');
       const originalText = btn.querySelector('span').textContent;
 
-      // Simulate sending
       btn.querySelector('span').textContent = 'Enviado!';
       btn.style.background = '#22c55e';
       btn.style.pointerEvents = 'none';
@@ -224,7 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       console.log('Form submitted:', data);
 
-      // Reset after 3 seconds
       setTimeout(() => {
         btn.querySelector('span').textContent = originalText;
         btn.style.background = '';
@@ -235,73 +348,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ─── Keyboard Navigation (Arrow keys for snap sections) ───
-  let isScrolling = false;
+  // ─── Initial Setup ───
+  // Ensure first section is active
+  sections[0].classList.add('active');
+  updateNavIndicators(0);
 
-  snapContainer.addEventListener('wheel', () => {
-    isScrolling = true;
-    clearTimeout(snapContainer._wheelTimeout);
-    snapContainer._wheelTimeout = setTimeout(() => {
-      isScrolling = false;
-    }, 1000);
+  // Trigger skill bar animation for hero section reveals
+  requestAnimationFrame(() => {
+    sections[0].querySelectorAll('.reveal').forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    });
   });
 
-  document.addEventListener('keydown', (e) => {
-    if (isScrolling) return;
-
-    const currentSection = getCurrentVisibleSection();
-    if (!currentSection) return;
-
-    let targetSection = null;
-
-    if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-      targetSection = currentSection.nextElementSibling;
-    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-      targetSection = currentSection.previousElementSibling;
-    } else if (e.key === 'Home') {
-      targetSection = sections[0];
-    } else if (e.key === 'End') {
-      targetSection = sections[sections.length - 1];
-    }
-
-    if (targetSection && targetSection.classList.contains('section')) {
-      e.preventDefault();
-      targetSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }
-  });
-
-  function getCurrentVisibleSection() {
-    const scrollTop = snapContainer.scrollTop;
-    const containerHeight = snapContainer.clientHeight;
-
-    let closest = null;
-    let closestDistance = Infinity;
-
-    sections.forEach((section) => {
-      const sectionTop = section.offsetTop - navbar.offsetHeight;
-      const distance = Math.abs(scrollTop - sectionTop);
-
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closest = section;
-      }
-    });
-
-    return closest;
-  }
-
-  // ─── Initial Reveal for Hero Section ───
-  // The hero should be visible immediately
-  const heroContent = document.querySelector('.hero-content');
-  if (heroContent) {
-    // Small delay for entrance effect
-    requestAnimationFrame(() => {
-      heroContent.classList.add('visible');
-    });
-  }
-
-  console.log('Mozz Vader Portfolio loaded.');
+  console.log('Mozz Vader Portfolio loaded. Custom scroll engine active.');
 });
