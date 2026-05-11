@@ -1203,6 +1203,79 @@ textarea {
   font-size: 1rem;
 }
 
+/* ── Projects Horizontal Scroll (when > 3 projects) ── */
+.projects-viewport {
+  position: relative;
+}
+
+.projects-viewport.has-scroll {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.projects-scroll {
+  flex: 1;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.projects-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.projects-viewport.has-scroll .projects-grid {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+}
+
+.projects-viewport.has-scroll .project-card {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+
+.projects-chevron {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  z-index: 5;
+}
+
+.projects-chevron:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--surface);
+}
+
+.projects-chevron:active {
+  transform: scale(0.92);
+}
+
+.projects-chevron svg {
+  width: 20px;
+  height: 20px;
+}
+
+.projects-chevron.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* Project image (when loaded from Supabase) */
 .project-image img {
   width: 100%;
@@ -1229,6 +1302,11 @@ textarea {
 .project-expand:hover {
   background: rgba(255, 255, 255, 0.35);
   transform: scale(1.1);
+}
+
+.project-expand svg {
+  width: 20px;
+  height: 20px;
 }
 
 /* ============================================
@@ -1492,6 +1570,12 @@ textarea {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .projects-viewport.has-scroll .projects-grid {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+  }
+
   .about-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -1540,6 +1624,29 @@ textarea {
     grid-template-columns: 1fr;
     max-width: 420px;
     margin: 0 auto;
+  }
+
+  .projects-viewport.has-scroll .projects-grid {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    max-width: none;
+    margin: 0;
+  }
+
+  .projects-viewport.has-scroll .project-card {
+    min-width: 280px !important;
+    width: 280px !important;
+  }
+
+  .projects-chevron {
+    width: 34px;
+    height: 34px;
+  }
+
+  .projects-chevron svg {
+    width: 16px;
+    height: 16px;
   }
 
   .about-details {

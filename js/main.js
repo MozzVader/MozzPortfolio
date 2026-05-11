@@ -368,7 +368,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      container.innerHTML = projects.map((project, i) => {
+      // Build all project cards HTML
+      const cardsHTML = projects.map((project, i) => {
         const hasDemo = !!project.demo_url;
         const hasRepo = !!project.repo_url;
         const tags = Array.isArray(project.tags) ? project.tags : [];
@@ -432,6 +433,79 @@ document.addEventListener('DOMContentLoaded', () => {
           </article>
         `;
       }).join('');
+
+      // If more than 3 projects, use horizontal scroll with chevrons
+      if (projects.length > 3) {
+        container.innerHTML = `
+          <div class="projects-viewport has-scroll">
+            <button class="projects-chevron hidden" id="projChevLeft" aria-label="Proyectos anteriores">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+            <div class="projects-scroll" id="projectsScroll">
+              <div class="projects-grid">${cardsHTML}</div>
+            </div>
+            <button class="projects-chevron" id="projChevRight" aria-label="Proyectos siguientes">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          </div>
+        `;
+
+        // Calculate card width to match 3-column grid
+        const scrollEl = document.getElementById('projectsScroll');
+        const leftChev = document.getElementById('projChevLeft');
+        const rightChev = document.getElementById('projChevRight');
+
+        function calcCardWidth() {
+          // Available width = scroll container width minus 2 gaps for 3 visible cards
+          const gap = 24; // 1.5rem
+          return Math.floor((scrollEl.clientWidth - 2 * gap) / 3);
+        }
+
+        function setCardSizes() {
+          const w = calcCardWidth();
+          scrollEl.querySelectorAll('.project-card').forEach(card => {
+            card.style.minWidth = w + 'px';
+            card.style.width = w + 'px';
+          });
+        }
+
+        function updateChevrons() {
+          const { scrollLeft, scrollWidth, clientWidth } = scrollEl;
+          leftChev.classList.toggle('hidden', scrollLeft <= 5);
+          rightChev.classList.toggle('hidden', scrollLeft >= scrollWidth - clientWidth - 5);
+        }
+
+        // Initial sizing
+        setCardSizes();
+        updateChevrons();
+
+        // Chevron click handlers
+        leftChev.addEventListener('click', () => {
+          const w = calcCardWidth();
+          scrollEl.scrollBy({ left: -(w + 24), behavior: 'smooth' });
+        });
+
+        rightChev.addEventListener('click', () => {
+          const w = calcCardWidth();
+          scrollEl.scrollBy({ left: w + 24, behavior: 'smooth' });
+        });
+
+        // Update chevron visibility on scroll
+        scrollEl.addEventListener('scroll', updateChevrons, { passive: true });
+
+        // Recalculate on resize
+        window.addEventListener('resize', () => {
+          setCardSizes();
+          updateChevrons();
+        });
+      } else {
+        // 3 or fewer projects: standard grid (no scroll)
+        container.innerHTML = `<div class="projects-grid">${cardsHTML}</div>`;
+      }
 
       // Attach expand button handlers
       container.querySelectorAll('.project-expand').forEach(btn => {
