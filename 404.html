@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>404 — Pagina no encontrada | Mozz Vader</title>
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    /* 404 page overrides — styles.css provides the full design system */
+    html { overflow: auto; }
+
+    .f404 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Diagonal lines background */
+    .f404-diags {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .f404-diags span {
+      position: absolute;
+      display: block;
+      width: 1px;
+      height: 200%;
+      background: linear-gradient(to bottom, transparent, var(--primary-glow), transparent);
+      transform-origin: center;
+      opacity: 0.4;
+    }
+
+    .f404-diags span:nth-child(1) { left: 8%;  transform: rotate(-18deg); opacity: 0.25; }
+    .f404-diags span:nth-child(2) { left: 22%; transform: rotate(-18deg); opacity: 0.4; }
+    .f404-diags span:nth-child(3) { right: 22%; transform: rotate(18deg);  opacity: 0.35; }
+    .f404-diags span:nth-child(4) { right: 8%;  transform: rotate(18deg);  opacity: 0.5; }
+    .f404-diags span:nth-child(5) { left: 50%;  transform: translateX(-50%) rotate(-9deg); opacity: 0.15; width: 2px; }
+
+    /* Center glow */
+    .f404::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--hero-glow);
+      pointer-events: none;
+    }
+
+    /* Content */
+    .f404-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 480px;
+    }
+
+    .f404-logo {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      margin-bottom: 2.5rem;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .f404-logo:hover { color: var(--text); }
+
+    .f404-code {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: clamp(7rem, 20vw, 12rem);
+      line-height: 1;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--primary) 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s ease-in-out infinite;
+      margin-bottom: 0.5rem;
+      user-select: none;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .f404-subtitle {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: clamp(1.25rem, 3vw, 1.5rem);
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .f404-desc {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    /* Diagonal divider */
+    .f404-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .f404-divider-line {
+      display: block;
+      width: 40px;
+      height: 2px;
+      background: var(--primary);
+      transform: rotate(-18deg);
+      border-radius: 2px;
+    }
+
+    .f404-divider-diamond {
+      display: block;
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      transform: rotate(45deg);
+      border-radius: 2px;
+    }
+
+    /* Floating bracket decorations */
+    .f404-brackets {
+      position: absolute;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      color: var(--primary);
+      opacity: 0.06;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .f404-bracket-1 {
+      top: 10%;
+      left: 5%;
+      font-size: 8rem;
+      transform: rotate(-15deg);
+    }
+
+    .f404-bracket-2 {
+      bottom: 10%;
+      right: 5%;
+      font-size: 6rem;
+      transform: rotate(20deg);
+    }
+
+    .f404-bracket-3 {
+      top: 20%;
+      right: 12%;
+      font-size: 4rem;
+      transform: rotate(-8deg);
+      opacity: 0.04;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .f404 { padding: 1.5rem; }
+      .f404-bracket-1 { font-size: 5rem; left: 2%; }
+      .f404-bracket-2 { font-size: 4rem; right: 2%; }
+      .f404-bracket-3 { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="f404">
+    <!-- Background decoration -->
+    <div class="f404-diags" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <!-- Floating bracket decorations -->
+    <div class="f404-brackets f404-bracket-1" aria-hidden="true">&lt;</div>
+    <div class="f404-brackets f404-bracket-2" aria-hidden="true">/&gt;</div>
+    <div class="f404-brackets f404-bracket-3" aria-hidden="true">&gt;</div>
+
+    <!-- Content -->
+    <div class="f404-content">
+      <a href="/" class="f404-logo">
+        <span class="logo-bracket">&lt;</span>Mozz<span class="logo-dot">.</span><span class="logo-bracket">/&gt;</span>
+      </a>
+
+      <div class="f404-code">404</div>
+
+      <h1 class="f404-subtitle">Pagina no encontrada</h1>
+
+      <div class="f404-divider" aria-hidden="true">
+        <span class="f404-divider-line"></span>
+        <span class="f404-divider-diamond"></span>
+        <span class="f404-divider-line"></span>
+      </div>
+
+      <p class="f404-desc">
+        La ruta que buscabas no existe o fue movida.
+        Pero no te preocupes, desde aca podes volver al portfolio.
+      </p>
+
+      <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <a href="/" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+            <path d="M19 12H5"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+          <span>Volver al inicio</span>
+        </a>
+        <a href="javascript:history.back()" class="btn btn-outline">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+          </svg>
+          <span>Volver atras</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
