@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="13" fill="#0a0a0f"/>
-  <text x="32" y="43" text-anchor="middle" font-family="'Courier New',monospace" font-weight="bold" font-size="24" letter-spacing="-1">
-    <tspan fill="#7f03fc">&lt;</tspan><tspan fill="#ffffff">M</tspan><tspan fill="#7f03fc">./</tspan><tspan fill="#7f03fc">&gt;</tspan>
-  </text>
-</svg>
