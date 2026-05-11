@@ -2,6 +2,28 @@
    MOZZ VADER — ADMIN PANEL
    ============================================ */
 
+/* ── Scrollbar (dark mode safe) ── */
+.admin-dashboard::-webkit-scrollbar,
+.admin-modal-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.admin-dashboard::-webkit-scrollbar-track,
+.admin-modal-card::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+.admin-dashboard::-webkit-scrollbar-thumb,
+.admin-modal-card::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.admin-dashboard::-webkit-scrollbar-thumb:hover,
+.admin-modal-card::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
 /* ── Login Page ── */
 .admin-login {
   min-height: 100vh;

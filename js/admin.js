@@ -142,7 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const { data: projects, error } = await supabase
       .from('projects')
       .select('*')
-      .order('sort_order', { ascending: true });
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true });
 
     if (error) {
       console.error('Error loading projects:', error);
