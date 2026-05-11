@@ -462,7 +462,8 @@ textarea {
 }
 
 /* ============================================
-   MESH BACKGROUND (Low-poly triangle pattern)
+   MESH BACKGROUND (Low-poly "peeled plaster" effect)
+   — Solid bg with middle-third window revealing triangles
    ============================================ */
 .section-mesh-bg {
   position: absolute;
@@ -470,6 +471,21 @@ textarea {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  /* Mask: reveal only the middle third with soft feathered edges */
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent 0%,
+    transparent 27%,
+    black 34%,
+    black 66%,
+    transparent 73%,
+    transparent 100%);
+  mask-image: linear-gradient(to bottom,
+    transparent 0%,
+    transparent 27%,
+    black 34%,
+    black 66%,
+    transparent 73%,
+    transparent 100%);
 }
 
 .mesh-svg {
@@ -479,41 +495,45 @@ textarea {
   height: 100%;
 }
 
-/* Top shadow — creates illusion that mesh floats below the viewport */
-.mesh-top-shadow {
+/* ── Depth shadows at window edges ──
+   Pseudo-elements on sections that have a mesh background.
+   They sit ABOVE the mesh (z-index 1) but BELOW the content (z-index 2),
+   creating the illusion of the "plaster" overlapping the edges of the window. */
+.section:has(.section-mesh-bg)::before,
+.section:has(.section-mesh-bg)::after {
+  content: '';
   position: absolute;
-  top: 0;
   left: 0;
   right: 0;
-  height: 120px;
-  background: linear-gradient(
-    to bottom,
-    var(--bg) 0%,
-    var(--bg) 30%,
-    transparent 100%
-  );
-  z-index: 2;
+  z-index: 1;
+  pointer-events: none;
 }
 
-/* Bottom shadow — creates depth at the bottom */
-.mesh-bottom-shadow {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  background: linear-gradient(
-    to top,
+/* Top shadow — wall fades into the mesh window from above */
+.section:has(.section-mesh-bg)::before {
+  top: 34%;
+  height: 55px;
+  background: linear-gradient(to bottom,
     var(--bg) 0%,
-    var(--bg) 30%,
-    transparent 100%
-  );
-  z-index: 2;
+    var(--bg) 70%,
+    rgba(127, 3, 252, 0.08) 90%,
+    transparent 100%);
+}
+
+/* Bottom shadow — mesh window fades into the wall below */
+.section:has(.section-mesh-bg)::after {
+  bottom: 34%;
+  height: 55px;
+  background: linear-gradient(to top,
+    var(--bg) 0%,
+    var(--bg) 70%,
+    rgba(127, 3, 252, 0.08) 90%,
+    transparent 100%);
 }
 
 .section-inner {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 /* ============================================
@@ -1292,9 +1312,9 @@ textarea {
     gap: 2rem;
   }
 
-  .section-mesh-bg .mesh-top-shadow,
-  .section-mesh-bg .mesh-bottom-shadow {
-    height: 80px;
+  .section:has(.section-mesh-bg)::before,
+  .section:has(.section-mesh-bg)::after {
+    height: 40px;
   }
 }
 
@@ -1342,9 +1362,9 @@ textarea {
     min-width: 140px;
   }
 
-  .section-mesh-bg .mesh-top-shadow,
-  .section-mesh-bg .mesh-bottom-shadow {
-    height: 60px;
+  .section:has(.section-mesh-bg)::before,
+  .section:has(.section-mesh-bg)::after {
+    height: 35px;
   }
 
   .section-indicators {

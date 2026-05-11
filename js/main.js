@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (saved) {
       html.setAttribute('data-theme', saved);
     } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      // Default to dark mode
+      html.setAttribute('data-theme', 'dark');
     }
   }
 
