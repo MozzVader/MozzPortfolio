@@ -329,9 +329,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show loading skeletons
     container.classList.add('loading');
     container.innerHTML = `
-      <div class="project-skeleton"><div class="skeleton-image"></div><div class="skeleton-text"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
-      <div class="project-skeleton"><div class="skeleton-image"></div><div class="skeleton-text"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
-      <div class="project-skeleton"><div class="skeleton-image"></div><div class="skeleton-text"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+      <div class="projects-grid">
+        <div class="project-skeleton"><div class="skeleton-image"></div><div class="skeleton-text"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+        <div class="project-skeleton"><div class="skeleton-image"></div><div class="skeleton-text"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+        <div class="project-skeleton"><div class="skeleton-image"></div><div class="skeleton-text"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+      </div>
     `;
 
     try {
