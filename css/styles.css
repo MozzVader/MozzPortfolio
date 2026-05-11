@@ -464,6 +464,7 @@ textarea {
 /* ============================================
    MESH BACKGROUND (Low-poly "peeled plaster" effect)
    — Solid bg with middle-third window revealing triangles
+   — Sharp edge + depth shadow from plaster onto mesh
    ============================================ */
 .section-mesh-bg {
   position: absolute;
@@ -471,20 +472,20 @@ textarea {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  /* Mask: reveal only the middle third with soft feathered edges */
+  /* Mask: SHARP edge — mesh appears/disappears in ~1% of viewport */
   -webkit-mask-image: linear-gradient(to bottom,
     transparent 0%,
-    transparent 27%,
-    black 34%,
-    black 66%,
-    transparent 73%,
+    transparent 33%,
+    black 34.5%,
+    black 65.5%,
+    transparent 67%,
     transparent 100%);
   mask-image: linear-gradient(to bottom,
     transparent 0%,
-    transparent 27%,
-    black 34%,
-    black 66%,
-    transparent 73%,
+    transparent 33%,
+    black 34.5%,
+    black 65.5%,
+    transparent 67%,
     transparent 100%);
 }
 
@@ -495,10 +496,11 @@ textarea {
   height: 100%;
 }
 
-/* ── Depth shadows at window edges ──
+/* ── Depth shadows: plaster edge casting shadow onto recessed mesh ──
    Pseudo-elements on sections that have a mesh background.
-   They sit ABOVE the mesh (z-index 1) but BELOW the content (z-index 2),
-   creating the illusion of the "plaster" overlapping the edges of the window. */
+   They sit ABOVE the mesh (z-index 1) but BELOW the content (z-index 2).
+   The shadow simulates the elevated plaster wall casting light-blocking
+   shadow onto the mesh surface behind it. Never reaches full opacity. */
 .section:has(.section-mesh-bg)::before,
 .section:has(.section-mesh-bg)::after {
   content: '';
@@ -509,25 +511,44 @@ textarea {
   pointer-events: none;
 }
 
-/* Top shadow — wall fades into the mesh window from above */
+/* Top shadow — plaster ABOVE casts shadow DOWN onto mesh */
 .section:has(.section-mesh-bg)::before {
-  top: 34%;
-  height: 55px;
+  top: 33%;
+  height: 120px;
   background: linear-gradient(to bottom,
-    var(--bg) 0%,
-    var(--bg) 70%,
-    rgba(127, 3, 252, 0.08) 90%,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.28) 20%,
+    rgba(0, 0, 0, 0.12) 45%,
+    rgba(0, 0, 0, 0.03) 75%,
     transparent 100%);
 }
 
-/* Bottom shadow — mesh window fades into the wall below */
+/* Bottom shadow — plaster BELOW casts shadow UP onto mesh */
 .section:has(.section-mesh-bg)::after {
-  bottom: 34%;
-  height: 55px;
+  bottom: 33%;
+  height: 120px;
   background: linear-gradient(to top,
-    var(--bg) 0%,
-    var(--bg) 70%,
-    rgba(127, 3, 252, 0.08) 90%,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.28) 20%,
+    rgba(0, 0, 0, 0.12) 45%,
+    rgba(0, 0, 0, 0.03) 75%,
+    transparent 100%);
+}
+
+/* Light mode: lighter shadow since the "wall" is white-ish */
+[data-theme="light"] .section:has(.section-mesh-bg)::before {
+  background: linear-gradient(to bottom,
+    rgba(0, 0, 0, 0.22) 0%,
+    rgba(0, 0, 0, 0.1) 25%,
+    rgba(0, 0, 0, 0.04) 55%,
+    transparent 100%);
+}
+
+[data-theme="light"] .section:has(.section-mesh-bg)::after {
+  background: linear-gradient(to top,
+    rgba(0, 0, 0, 0.22) 0%,
+    rgba(0, 0, 0, 0.1) 25%,
+    rgba(0, 0, 0, 0.04) 55%,
     transparent 100%);
 }
 
@@ -1314,7 +1335,7 @@ textarea {
 
   .section:has(.section-mesh-bg)::before,
   .section:has(.section-mesh-bg)::after {
-    height: 40px;
+    height: 90px;
   }
 }
 
@@ -1364,7 +1385,7 @@ textarea {
 
   .section:has(.section-mesh-bg)::before,
   .section:has(.section-mesh-bg)::after {
-    height: 35px;
+    height: 70px;
   }
 
   .section-indicators {
