@@ -31,13 +31,13 @@ class MeshBackground {
   /**
    * Returns a purple-ish color with variation based on position and theme
    */
-  getTriangleColor(cx, cy, w, h) {
+  getTriangleColor(cx, cy, width, height) {
     const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
     const r = this.seededRandom();
 
     // Normalize position (0 to 1)
-    const nx = cx / w;
-    const ny = cy / h;
+    const nx = cx / width;
+    const ny = cy / height;
 
     // Base opacity: triangles near edges are more transparent
     const edgeFade = Math.min(nx, 1 - nx, ny, 1 - ny) * 4;
