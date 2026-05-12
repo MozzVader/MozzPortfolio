@@ -1082,11 +1082,26 @@ textarea {
   );
 }
 
-.placeholder-icon {
-  width: 48px;
-  height: 48px;
-  color: var(--text-muted);
-  opacity: 0.4;
+.project-placeholder svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Light mode: invert placeholder SVG appearance */
+[data-theme="light"] .project-placeholder svg rect {
+  fill: #f0f0f8;
+}
+
+[data-theme="light"] .project-placeholder svg text tspan:first-child,
+[data-theme="light"] .project-placeholder svg text tspan:last-child {
+  fill: #7f03fc;
+  opacity: 0.12;
+}
+
+[data-theme="light"] .project-placeholder svg text tspan:nth-child(2) {
+  fill: #1a1a2e;
+  opacity: 0.1;
 }
 
 .project-overlay {
