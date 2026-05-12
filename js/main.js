@@ -420,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <line x1="360" y1="0" x2="96" y2="300" stroke="#7f03fc" stroke-width="1" opacity="0.05"/>
                 <line x1="432" y1="0" x2="168" y2="300" stroke="#7f03fc" stroke-width="1" opacity="0.07"/>
                 <line x1="240" y1="0" x2="240" y2="300" stroke="#7f03fc" stroke-width="1.5" opacity="0.03"/>
-                <text x="240" y="168" text-anchor="middle" font-family="'Courier New',monospace" font-weight="bold" font-size="56" letter-spacing="-2" opacity="0.08">
+                <text x="240" y="168" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="800" font-size="56" letter-spacing="-1" opacity="0.08">
                   <tspan fill="#7f03fc">&lt;</tspan><tspan fill="#f0f0f5">M</tspan><tspan fill="#7f03fc">&gt;</tspan>
                 </text>
               </svg>
